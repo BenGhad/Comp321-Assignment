@@ -5,24 +5,39 @@ count = 1
 NEGATIVE_ONE_CHANCE = 0.2
 
 
-def func(grid, r, c):
-    res = [[-1 for _ in range(c)] for _ in range(r)]
+def func(grid):
+    R = len(grid)
+    C = len(grid[0])
+    blocker = [[-1 for _ in range(C)] for _ in range(R)]
 
-    for j in range(c - 1, -1, -1):
-        mono = []
-        for i in range(r - 1, -1, -1):
-            while mono and grid[mono[-1]][j] - mono[-1] < grid[i][j] - i:
-                mono.pop()
-            if mono:
-                res[i][j] = mono[-1]
-            mono.append(i)
+    for c in range(C):
+        stack = []
+        for r in range(R - 1, -1, -1):
+            if grid[r][c] == -1:
+                blocker[r][c] = -1
+                continue
 
-    return res
+            eff_r = grid[r][c] + (R - r - 1)
+
+            while stack:
+                k = stack[-1]
+                eff_k = grid[k][c] + (R - k - 1)
+                if eff_k >= eff_r:
+                    break
+                stack.pop()
+
+            if not stack:
+                blocker[r][c] = -1
+            else:
+                blocker[r][c] = stack[-1]
+            stack.append(r)
+
+    return blocker
 
 
 def solve(grid, r, c, loc):
     global count
-    res = func(grid, r, c)
+    res = func(grid)
     toWrite = []
     for i in range(r):
         line = []
@@ -37,8 +52,8 @@ def solve(grid, r, c, loc):
 
 # SAMPLE INPUTS
 
-DIMENSION_MIN = 3
-DIMENSION_MAX = 3
+DIMENSION_MIN = 2
+DIMENSION_MAX = 5
 HEIGHT_MIN = 1
 HEIGHT_MAX = 10
 
@@ -161,7 +176,7 @@ for _ in range(4):
 # SINGLE ROW
 
 DIMENSION_MIN = 2
-DIMENSION_MAX = 10
+DIMENSION_MAX = 25
 HEIGHT_MIN = 1
 HEIGHT_MAX = 3
 
@@ -191,8 +206,8 @@ for _ in range(1):
 
 # SINGLE COLUMN
 
-DIMENSION_MIN = 10
-DIMENSION_MAX = 20
+DIMENSION_MIN = 2
+DIMENSION_MAX = 25
 HEIGHT_MIN = 1
 HEIGHT_MAX = 3
 
@@ -222,7 +237,7 @@ for _ in range(2):
 # EVERYONE BLOCKS EVERYONE
 
 DIMENSION_MIN = 2
-DIMENSION_MAX = 10
+DIMENSION_MAX = 25
 HEIGHT_MIN = 1
 HEIGHT_MAX = 3
 
@@ -251,7 +266,7 @@ for _ in range(2):
 # NO ONE BLOCKS ANYONE
 
 DIMENSION_MIN = 2
-DIMENSION_MAX = 10
+DIMENSION_MAX = 25
 HEIGHT_MIN = 70
 HEIGHT_MAX = 100
 
