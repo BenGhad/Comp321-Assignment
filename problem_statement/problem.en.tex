@@ -1,10 +1,24 @@
 \documentclass[11pt]{article}
-\usepackage{amsmath, amssymb}
-\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{framed}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{parskip}
 \usepackage{graphicx}
+\usepackage[most]{tcolorbox}
+\tcbset{
+  samplebox/.style={
+    colback=gray!10,
+    colframe=gray!50,
+    boxrule=0.8pt,
+    arc=3pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt
+  }
+}
 
-% Define \problemname and \illustration if not using Kattis template
-\newcommand{\problemname}[1]{\section*{#1}}
 \newcommand{\illustration}[3]{%
     \begin{figure}[h]
         \centering
@@ -13,31 +27,74 @@
     \end{figure}
 }
 
+
 \begin{document}
 
-\problemname{Title of the Problem Here}
+\begin{center}
+\textbf{\Large I Can't See the Screen!}
+\end{center}
 
-% Example use of the \illustration command
-% \illustration{0.3}{filename.jpg}{Photo by \href{url_here}{link text here, e.g. author name}}
+A cinema has $R$ rows and $C$ columns of seats, with row $0$ being furthest from the screen, and row $R-1$ the closest. The floor is sloped downward towards the screen such that each row is exactly $1ft$ higher than the row in front of it, with the first row having a height of $0ft$.
 
-Put the problem story here. Here are some common issues to keep in mind as you edit:
+The seats in the cinema are represented by an $R \times C$ matrix $H$, where $H[r][c]$ represents the height in $ft$ of the person sitting in row $r$, column $c$.
 
-\begin{itemize}
-    \item Use \LaTeX{} math mode for (most) numbers. The few exceptions are for years (e.g., 2019) or whenever a number is part of a string token.
-    \item For numbers $1\,000$ or larger, use thousands separator \verb|\,|. So, for example, one million would be $1\,000\,000$.
-    \item Write in active voice (i.e., avoid passive voice).
-    \item Write in present tense (avoid the word \texttt{will}, especially in the input description). For example, prefer: ``Input starts with an integer $n$ followed by $n$ lines...'' rather than ``Input \emph{will} start with an integer $n$, then \emph{will} come $n$ lines...''.
-\end{itemize}
+\begin{center}
 
-\section*{Input}
+\illustration{0.35}{cinema.png}{Photo by Felix Mooneeram on Unsplash}
+\end{center}
 
-Put the input format (syntax) description here, including constraints on all input values. That includes number ranges, the maximum number of digits after the decimal point for real values, the character sets and length ranges for strings, etc. If possible, always give a count of the number of items that follow (test cases, e.g.) rather than delimiting with a token or EOF. The input format should be fairly precise, so that the reader knows exactly what to expect (it should usually be easy to write a program to read the input using line-oriented or token-oriented parsing).
+\subsection*{Visibility Rule}
 
-\section*{Output}
+A person sitting in position $(r, c)$ cannot see the screen if there exists someone sitting in position $(k, c)$ ($k > r$) who is at least as tall in absolute position, accounting for both their physical height and the elevation of their row.
 
-Describe the output. Kattis output judging is not sensitive to case changes or space changes (including line formatting and blank lines). Try to maintain this flexibility with your problem—do not be overly precise or prescriptive here in the output formatting description. However, if exact textual matching or floating-point precision is required, do specify the constraints (e.g., ``your answer should be correct within a relative or absolute error of $10^{-3}$'').
+Among all such people sitting in row $k$ who block the view, only the nearest one (the smallest $k > r$) matters.
 
-\section*{Sample Input 1	Sample Output 1}
-Please provide at least one sample Input and Output for your problem.
+If no such person exists, the person sitting in position $(r, c)$ can see the screen.
+
+\subsection*{Input}
+Input starts with a line containing two space-separated integers $m$ and $n$ ($1 \leq m, n \leq 10000$) that represent the dimensions of $H$. Each of the next $m$ lines contain $n$ space-separated integers that represent the height in $ft$ of the person in the seat. For each $H[r][c]$, if the seat is empty, $H[r][c] = -1$. Otherwise, $1 \leq H[r][c] \leq 2^{32} - 1$.
+
+\subsection*{Output}
+
+Print an $R \times C$ grid of integers. For each $H[r][c]$, output $-1$ if the seat is empty or if the person can see the screen. Otherwise, output the row index $k$ of the nearest person in front of them who blocks their view.
+
+\noindent
+\begin{tcolorbox}[samplebox]
+\textbf{Sample Input 1}
+\begin{verbatim}
+3 3
+4 8 3
+4 2 3
+3 5 3
+\end{verbatim}
+\end{tcolorbox}
+
+\begin{tcolorbox}[samplebox]
+\textbf{Sample Output 1}
+\begin{verbatim}
+-1 -1 -1
+-1 2 -1
+-1 -1 -1
+\end{verbatim}
+\end{tcolorbox}
+
+\begin{tcolorbox}[samplebox]
+\textbf{Sample Input 2}
+\begin{verbatim}
+3 3
+5 1 3
+-1 2 3
+7 5 -1
+\end{verbatim}
+\end{tcolorbox}
+
+\begin{tcolorbox}[samplebox]
+\textbf{Sample Output 2}
+\begin{verbatim}
+2 1 -1
+-1 2 -1
+-1 -1 -1
+\end{verbatim}
+\end{tcolorbox}
 
 \end{document}
