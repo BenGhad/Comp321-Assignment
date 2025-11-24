@@ -1,0 +1,12 @@
+Tests 1-3: Sample tests with normal inputs that could be displayed to the user
+Test  4: Large input matrix to check that the user's algorithm has optimal time complexity. Moreover, the values in the input matrix's cells are assigned in such a way that it will need the most amount of computational steps possible to solve (i.e. when no one in the theater is blocking anyone).  
+Tests 5-8: Normal random tests like in Tests 1-3, but with a wider variety of inputs (e.g. bigger input matrix, bigger height range)
+Tests 9-12: Complicated random tests to see if the user's algorithm works when almost everyone in the rows behind the first row is blocked
+Test  13: Edge case for when there is only a single row of seats (the resulting matrix should contain all '-1's)
+Tests 14-15: Edge case for when there is only a single column of seats
+Tests 16-17: Edge case for when absolutely everyone beyond the first row is blocked
+Tests 18-19: Edge case for when no one is blocked
+Test  20: Edge case for when there is only 1 seat in the theater, which is occupied
+Test  21: Edge case for when there is only 1 seat in the theater, which is not occupied
+Test  22: Edge case for when all seats are empty
+Test  23: Edge case for when everyone has the same height
